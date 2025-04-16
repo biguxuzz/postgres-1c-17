@@ -17,6 +17,7 @@ ENV LC_ALL ru_RU.UTF-8
 RUN mkdir -p /opt/pgpro/debs
 
 # Копирование .deb файлов
+COPY debs/postgrespro-ent-17_17.4.1-1.noble_amd64.deb /opt/pgpro/debs/
 COPY debs/postgrespro-ent-17-libs_17.4.1-1.noble_amd64.deb /opt/pgpro/debs/
 COPY debs/postgrespro-ent-17-client_17.4.1-1.noble_amd64.deb /opt/pgpro/debs/
 COPY debs/postgrespro-ent-17-contrib_17.4.1-1.noble_amd64.deb /opt/pgpro/debs/
@@ -24,6 +25,7 @@ COPY debs/postgrespro-ent-17-server_17.4.1-1.noble_amd64.deb /opt/pgpro/debs/
 
 # Установка PostgresPro из .deb файлов
 RUN apt-get update && \
+    apt-get install -y /opt/pgpro/debs/postgrespro-ent-17_17.4.1-1.noble_amd64.deb && \
     apt-get install -y /opt/pgpro/debs/postgrespro-ent-17-libs_17.4.1-1.noble_amd64.deb && \
     apt-get install -y /opt/pgpro/debs/postgrespro-ent-17-client_17.4.1-1.noble_amd64.deb && \
     apt-get install -y /opt/pgpro/debs/postgrespro-ent-17-contrib_17.4.1-1.noble_amd64.deb && \
