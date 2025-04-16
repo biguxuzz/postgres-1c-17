@@ -26,7 +26,7 @@ postgres_exec() {
 # Если сервер еще не инициализирован
 if [ -z "$(ls -A "$PGDATA" 2>/dev/null)" ]; then
     echo "Инициализация базы данных..."
-    su - postgres -c "/opt/pgpro/ent-17/bin/pg-setup initdb --tune=1c -D $PGDATA --locale=ru_RU.UTF-8"
+    su - postgres -c "/opt/pgpro/ent-17/bin/pg-setup initdb --tune=1c -D $PGDATA --locale-provider=icu --locale=ru_RU.UTF-8 --lc-collate=ru_RU.UTF-8 --lc-ctype=ru_RU.UTF-8 --lc-messages=ru_RU.UTF-8 --lc-monetary=ru_RU.UTF-8 --lc-numeric=ru_RU.UTF-8 --lc-time=ru_RU.UTF-8"
     
     # Настройка конфигурации
     echo "listen_addresses = '*'" >> "$PGDATA/postgresql.conf"
@@ -44,7 +44,7 @@ if [ -z "$(ls -A "$PGDATA" 2>/dev/null)" ]; then
     fi
     
     if [ "$POSTGRES_DB" != "postgres" ]; then
-        postgres_exec "CREATE DATABASE $POSTGRES_DB OWNER $POSTGRES_USER LC_COLLATE='ru_RU.UTF-8' LC_CTYPE='ru_RU.UTF-8' TEMPLATE=template0;"
+        postgres_exec "CREATE DATABASE $POSTGRES_DB OWNER $POSTGRES_USER LOCALE_PROVIDER=icu LOCALE='ru_RU.UTF-8' LC_COLLATE='ru_RU.UTF-8' LC_CTYPE='ru_RU.UTF-8' LC_MESSAGES='ru_RU.UTF-8' LC_MONETARY='ru_RU.UTF-8' LC_NUMERIC='ru_RU.UTF-8' LC_TIME='ru_RU.UTF-8' TEMPLATE=template0;"
     fi
     
     # Остановка сервера

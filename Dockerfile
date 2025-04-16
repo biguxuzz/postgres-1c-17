@@ -43,7 +43,9 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Создание каталога данных
-RUN mkdir -p /var/lib/postgresql/17/main
+RUN mkdir -p /var/lib/postgresql/17/main && \
+    chown -R postgres:postgres /var/lib/postgresql/17/main && \
+    chmod 700 /var/lib/postgresql/17/main
 
 # Копирование скрипта запуска
 COPY docker-entrypoint.sh /
@@ -51,9 +53,6 @@ RUN chmod +x /docker-entrypoint.sh
 
 # Открытие порта
 EXPOSE 5432
-
-# Точка монтирования
-VOLUME ["/var/lib/postgresql/17/main"]
 
 # Установка переменной PATH
 ENV PATH $PATH:/usr/lib/postgresql/17/bin
