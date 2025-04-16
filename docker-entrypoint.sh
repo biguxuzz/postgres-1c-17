@@ -26,11 +26,11 @@ postgres_exec() {
 # Если сервер еще не инициализирован
 if [ -z "$(ls -A "$PGDATA" 2>/dev/null)" ]; then
     echo "Инициализация базы данных..."
-    su - postgres -c "initdb -D $PGDATA"
+    su - postgres -c "/opt/pgpro/ent-17/bin/pg-setup initdb --tune=1c -D $PGDATA --locale=ru_RU.UTF-8"
     
     # Настройка конфигурации
     echo "listen_addresses = '*'" >> "$PGDATA/postgresql.conf"
-    echo "host all all all scram-sha-256" >> "$PGDATA/pg_hba.conf"
+    echo "host all all all md5" >> "$PGDATA/pg_hba.conf"
     
     # Запуск сервера для настройки
     su - postgres -c "pg_ctl -D $PGDATA -o '-c listen_addresses=localhost' -w start"
@@ -44,7 +44,7 @@ if [ -z "$(ls -A "$PGDATA" 2>/dev/null)" ]; then
     fi
     
     if [ "$POSTGRES_DB" != "postgres" ]; then
-        postgres_exec "CREATE DATABASE $POSTGRES_DB OWNER $POSTGRES_USER;"
+        postgres_exec "CREATE DATABASE $POSTGRES_DB OWNER $POSTGRES_USER LC_COLLATE='ru_RU.UTF-8' LC_CTYPE='ru_RU.UTF-8' TEMPLATE=template0;"
     fi
     
     # Остановка сервера
