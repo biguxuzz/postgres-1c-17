@@ -26,7 +26,8 @@ postgres_exec() {
 # Если сервер еще не инициализирован
 if [ -z "$(ls -A "$PGDATA" 2>/dev/null)" ]; then
     echo "Инициализация базы данных..."
-    su - postgres -c "/opt/pgpro/ent-17/bin/pg-setup initdb --tune=1c -D $PGDATA --locale-provider=icu --locale=ru_RU.UTF-8 --lc-collate=ru_RU.UTF-8 --lc-ctype=ru_RU.UTF-8 --lc-messages=ru_RU.UTF-8 --lc-monetary=ru_RU.UTF-8 --lc-numeric=ru_RU.UTF-8 --lc-time=ru_RU.UTF-8"
+    # Запуск pg-setup от root
+    /opt/pgpro/ent-17/bin/pg-setup initdb --tune=1c -D "$PGDATA" --locale-provider=icu --locale=ru_RU.UTF-8 --lc-collate=ru_RU.UTF-8 --lc-ctype=ru_RU.UTF-8 --lc-messages=ru_RU.UTF-8 --lc-monetary=ru_RU.UTF-8 --lc-numeric=ru_RU.UTF-8 --lc-time=ru_RU.UTF-8
     
     # Настройка конфигурации
     echo "listen_addresses = '*'" >> "$PGDATA/postgresql.conf"
