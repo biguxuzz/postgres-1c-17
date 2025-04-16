@@ -1,11 +1,11 @@
 version: '3.8'
 
 services:
-  postgrespro-1c:
+  postgrespro-ee:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: postgrespro-1c
+    container_name: postgrespro-ee
     restart: unless-stopped
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
@@ -14,7 +14,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - pgdata:/var/lib/pgpro/1c-17/data
+      - pgdata:/var/lib/postgresql/17/main
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}"]
       interval: 10s

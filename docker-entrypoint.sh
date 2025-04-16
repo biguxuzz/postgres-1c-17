@@ -12,7 +12,7 @@ POSTGRES_USER=${POSTGRES_USER:-postgres}
 POSTGRES_DB=${POSTGRES_DB:-postgres}
 
 # Директория с данными
-PGDATA="/var/lib/pgpro/1c-17/data"
+PGDATA="/var/lib/postgresql/17/main"
 
 # Проверка прав доступа к каталогу данных
 chown -R postgres:postgres "$PGDATA"
@@ -26,14 +26,14 @@ postgres_exec() {
 # Если сервер еще не инициализирован
 if [ -z "$(ls -A "$PGDATA" 2>/dev/null)" ]; then
     echo "Инициализация базы данных..."
-    su - postgres -c "/opt/pgpro/1c-17/bin/initdb -D $PGDATA"
+    su - postgres -c "initdb -D $PGDATA"
     
     # Настройка конфигурации
     echo "listen_addresses = '*'" >> "$PGDATA/postgresql.conf"
     echo "host all all all scram-sha-256" >> "$PGDATA/pg_hba.conf"
     
     # Запуск сервера для настройки
-    su - postgres -c "/opt/pgpro/1c-17/bin/pg_ctl -D $PGDATA -o '-c listen_addresses=localhost' -w start"
+    su - postgres -c "pg_ctl -D $PGDATA -o '-c listen_addresses=localhost' -w start"
     
     # Смена пароля postgres
     postgres_exec "ALTER USER postgres WITH PASSWORD '$POSTGRES_PASSWORD';"
@@ -48,7 +48,7 @@ if [ -z "$(ls -A "$PGDATA" 2>/dev/null)" ]; then
     fi
     
     # Остановка сервера
-    su - postgres -c "/opt/pgpro/1c-17/bin/pg_ctl -D $PGDATA -m fast -w stop"
+    su - postgres -c "pg_ctl -D $PGDATA -m fast -w stop"
     
     echo "Инициализация базы данных завершена."
 else
@@ -57,7 +57,7 @@ fi
 
 # Запуск PostgreSQL
 if [ "$1" = 'postgres' ]; then
-    exec su - postgres -c "/opt/pgpro/1c-17/bin/postgres -D $PGDATA"
+    exec su - postgres -c "postgres -D $PGDATA"
 fi
 
 # Если передана другая команда, выполнить её
