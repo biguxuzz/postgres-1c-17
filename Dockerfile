@@ -6,6 +6,15 @@ RUN apt-get update && apt-get install -y \
     apt-transport-https \
     ca-certificates \
     locales \
+    libgssapi-krb5-2 \
+    libldap2 \
+    libicu74 \
+    libreadline8t64 \
+    libxml2 \
+    libxslt1.1 \
+    libunwind8 \
+    tzdata \
+    ssl-cert \
     && rm -rf /var/lib/apt/lists/*
 
 # Установка локали
@@ -25,11 +34,11 @@ COPY debs/postgrespro-ent-17-server_17.4.1-1.noble_amd64.deb /opt/pgpro/debs/
 
 # Установка PostgresPro из .deb файлов
 RUN apt-get update && \
-    dpkg -i /opt/pgpro/debs/postgrespro-ent-17_17.4.1-1.noble_amd64.deb || true && \
     dpkg -i /opt/pgpro/debs/postgrespro-ent-17-libs_17.4.1-1.noble_amd64.deb || true && \
     dpkg -i /opt/pgpro/debs/postgrespro-ent-17-client_17.4.1-1.noble_amd64.deb || true && \
     dpkg -i /opt/pgpro/debs/postgrespro-ent-17-contrib_17.4.1-1.noble_amd64.deb || true && \
     dpkg -i /opt/pgpro/debs/postgrespro-ent-17-server_17.4.1-1.noble_amd64.deb || true && \
+    dpkg -i /opt/pgpro/debs/postgrespro-ent-17_17.4.1-1.noble_amd64.deb || true && \
     apt-get -f install -y && \
     rm -rf /var/lib/apt/lists/*
 
