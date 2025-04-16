@@ -14,9 +14,7 @@ services:
     ports:
       - "5435:5432"
     volumes:
-      - type: volume
-        source: pgdata
-        target: /var/lib/postgresql/17/main
+      - ./data:/var/lib/postgresql/17/main
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}"]
       interval: 10s
